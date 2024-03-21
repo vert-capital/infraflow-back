@@ -18,7 +18,7 @@ func NewRepositoryNode(db *gorm.DB) *RepositoryNode {
 	}
 }
 
-func convertNodeToNodePayload(node *entity.EntityNode) *entity.EntityNodePayload {
+func convertNodeToNodePayload(node *entity.EntityNode, childrens []entity.EntityNodePayload) *entity.EntityNodePayload {
 	var position json.RawMessage
 	var positionAbsolute json.RawMessage
 	var style json.RawMessage
@@ -40,6 +40,8 @@ func convertNodeToNodePayload(node *entity.EntityNode) *entity.EntityNodePayload
 
 	return &entity.EntityNodePayload{
 		ID:               node.ID,
+		ApplicationID:    node.ApplicationID,
+		Application:      node.Application,
 		Position:         position,
 		Data:             node.Data.Local().Format("2006-01-02"),
 		Type:             node.Type,
@@ -65,23 +67,59 @@ func convertNodeToNodePayload(node *entity.EntityNode) *entity.EntityNodePayload
 		Focusable:        node.Focusable,
 		Style:            style,
 		ClassName:        node.ClassName,
+		Childrens:        childrens,
 	}
 }
 
-func (n *RepositoryNode) GetAll() ([]entity.EntityNodePayload, error) {
+func (n *RepositoryNode) GetAll(application_id *string) (payloads []entity.EntityNodePayload, err error) {
 	var nodes []entity.EntityNode
-	err := n.db.Find(&nodes).Error
-	var payloads []entity.EntityNodePayload
+
+	if application_id != nil {
+		err = n.db.Where("application_id = ? and parent_node_id is null", application_id).Find(&nodes).Error
+	} else {
+		err = n.db.Where("parent_node_id is null").Find(&nodes).Error
+	}
+	if err != nil {
+		return payloads, err
+	}
 	for _, node := range nodes {
-		payloads = append(payloads, *convertNodeToNodePayload(&node))
+		childrens, err := n.GetNodeChildrens(node.ID)
+		if err != nil {
+			return payloads, err
+		}
+		payloads = append(payloads, *convertNodeToNodePayload(&node, childrens))
 	}
 	return payloads, err
+}
+
+func (n *RepositoryNode) GetNodeChildrens(parent_id string) (payloads []entity.EntityNodePayload, err error) {
+	var nodes []entity.EntityNode
+	err = n.db.Where("parent_node_id = ?", parent_id).Find(&nodes).Error
+	if err != nil {
+		return payloads, err
+	}
+	for _, node := range nodes {
+		childrens, err := n.GetNodeChildrens(node.ID)
+		if err != nil {
+			return payloads, err
+		}
+		payloads = append(payloads, *convertNodeToNodePayload(&node, childrens))
+	}
+	return payloads, err
+
 }
 
 func (n *RepositoryNode) GetByID(id string) (*entity.EntityNodePayload, error) {
 	var node *entity.EntityNode
 	err := n.db.Where("id = ?", id).First(&node).Error
-	payload := convertNodeToNodePayload(node)
+	if err != nil {
+		return nil, err
+	}
+	childrens, err := n.GetNodeChildrens(id)
+	if err != nil {
+		return nil, err
+	}
+	payload := convertNodeToNodePayload(node, childrens)
 	return payload, err
 }
 

@@ -24,6 +24,7 @@ func Migrations() {
 	db := Connect()
 
 	db.AutoMigrate(&entity.EntityUser{})
+	db.AutoMigrate(&entity.EntityApplication{})
 	db.AutoMigrate(&entity.EntityNode{})
 }
 

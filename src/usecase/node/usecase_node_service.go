@@ -10,8 +10,8 @@ func NewUseCaseNode(repo IRepositoryNode) *UseCaseNode {
 	return &UseCaseNode{repo: repo}
 }
 
-func (n *UseCaseNode) GetAll() ([]entity.EntityNodePayload, error) {
-	return n.repo.GetAll()
+func (n *UseCaseNode) GetAll(application_id *string) ([]entity.EntityNodePayload, error) {
+	return n.repo.GetAll(application_id)
 }
 
 func (n *UseCaseNode) GetByID(id string) (*entity.EntityNodePayload, error) {

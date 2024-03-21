@@ -20,7 +20,12 @@ func NewNodeHandler(ucNode usecase_node.IUsecaseNode) *NodeHandlers {
 }
 
 func (h *NodeHandlers) GetAllHandler(c *gin.Context) {
-	node, err := h.UcNode.GetAll()
+	var application_id *string = nil
+	application_id_str, exists := c.GetQuery("application_id")
+	if exists {
+		application_id = &application_id_str
+	}
+	node, err := h.UcNode.GetAll(application_id)
 	if err != nil {
 		jsonResponse(c, http.StatusBadRequest, gin.H{
 			"error": err,
@@ -62,6 +67,7 @@ func (h *NodeHandlers) CreateHandler(c *gin.Context) {
 	entityNode := entity.EntityNode{
 		ID:               payload.ID,
 		Position:         string(positionJSON),
+		ApplicationID:    payload.ApplicationID,
 		Data:             data,
 		Type:             payload.Type,
 		SourcePosition:   payload.SourcePosition,
@@ -105,7 +111,7 @@ func (h *NodeHandlers) UpdateHandler(c *gin.Context) {
 		handleError(c, err)
 		return
 	}
-	node, err := h.UcNode.Create(&entityNode)
+	node, err := h.UcNode.Update(&entityNode)
 	if err != nil {
 		jsonResponse(c, http.StatusBadRequest, gin.H{
 			"error": err,
