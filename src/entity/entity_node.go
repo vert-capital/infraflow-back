@@ -2,7 +2,6 @@ package entity
 
 import (
 	"encoding/json"
-	"time"
 
 	"github.com/google/uuid"
 )
@@ -15,7 +14,7 @@ type EntityNode struct {
 	ApplicationID    string             `json:"application_id"`
 	Application      *EntityApplication `json:"application"`
 	Position         string             `json:"position"`
-	Data             time.Time          `json:"data"`
+	Data             string             `json:"data"`
 	Type             string             `json:"type"`
 	SourcePosition   Position           `json:"source_position"`
 	TargetPosition   Position           `json:"target_position"`
@@ -48,7 +47,7 @@ type EntityNodePayload struct {
 	ApplicationID    string              ` json:"application_id"`
 	Application      *EntityApplication  ` json:"application"`
 	Position         json.RawMessage     `json:"position"`
-	Data             string              `json:"data"`
+	Data             json.RawMessage     `json:"data"`
 	Type             string              `json:"type"`
 	SourcePosition   Position            `json:"source_position"`
 	TargetPosition   Position            `json:"target_position"`

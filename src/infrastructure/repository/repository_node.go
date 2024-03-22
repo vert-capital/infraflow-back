@@ -22,6 +22,8 @@ func convertNodeToNodePayload(node *entity.EntityNode, childrens []entity.Entity
 	var position json.RawMessage
 	var positionAbsolute json.RawMessage
 	var style json.RawMessage
+	var data json.RawMessage
+
 	err := json.Unmarshal([]byte(string(node.Position)), &position)
 	if err != nil {
 		fmt.Println(err)
@@ -37,13 +39,17 @@ func convertNodeToNodePayload(node *entity.EntityNode, childrens []entity.Entity
 		fmt.Println(err)
 		return nil
 	}
+	err = json.Unmarshal([]byte(string(node.Data)), &data)
+	if err != nil {
+		fmt.Println(err)
+		return nil
+	}
 
 	return &entity.EntityNodePayload{
 		ID:               node.ID,
 		ApplicationID:    node.ApplicationID,
 		Application:      node.Application,
 		Position:         position,
-		Data:             node.Data.Local().Format("2006-01-02"),
 		Type:             node.Type,
 		SourcePosition:   node.SourcePosition,
 		TargetPosition:   node.TargetPosition,
@@ -88,6 +94,10 @@ func (n *RepositoryNode) GetAll(application_id *string) (payloads []entity.Entit
 			return payloads, err
 		}
 		payloads = append(payloads, *convertNodeToNodePayload(&node, childrens))
+	}
+
+	if len(payloads) == 0 {
+		payloads = []entity.EntityNodePayload{}
 	}
 	return payloads, err
 }

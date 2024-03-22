@@ -5,7 +5,6 @@ import (
 	"app/infrastructure/repository"
 	usecase_node "app/usecase/node"
 	"net/http"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -54,21 +53,18 @@ func (h *NodeHandlers) CreateHandler(c *gin.Context) {
 		handleError(c, err)
 		return
 	}
-	data, err := time.Parse("2006-01-02", payload.Data)
-	if err != nil {
-		handleError(c, err)
-		return
-	}
+
 	positionJSON, _ := payload.Position.MarshalJSON()
 	positionAbsoluteJson, _ := payload.PositionAbsolute.MarshalJSON()
 	styleJson, _ := payload.Style.MarshalJSON()
 	style := string(styleJson)
+	dataJSON, _ := payload.Data.MarshalJSON()
 
 	entityNode := entity.EntityNode{
 		ID:               payload.ID,
 		Position:         string(positionJSON),
 		ApplicationID:    payload.ApplicationID,
-		Data:             data,
+		Data:             string(dataJSON),
 		Type:             payload.Type,
 		SourcePosition:   payload.SourcePosition,
 		TargetPosition:   payload.TargetPosition,
