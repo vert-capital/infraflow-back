@@ -92,6 +92,7 @@ func (h *NodeHandlers) CreateHandler(c *gin.Context) {
 		Focusable:        payload.Focusable,
 		Style:            &style,
 		ClassName:        payload.ClassName,
+		Label:            payload.Label,
 	}
 	node, err := h.UcNode.Create(&entityNode)
 	if err != nil {

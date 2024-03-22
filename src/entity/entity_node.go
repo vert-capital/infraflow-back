@@ -40,6 +40,7 @@ type EntityNode struct {
 	Focusable        bool               `json:"focusable"`
 	Style            *string            `json:"style"`
 	ClassName        string             `json:"class_name"`
+	Label            string             `json:"label"`
 }
 
 type EntityNodePayload struct {
@@ -72,6 +73,7 @@ type EntityNodePayload struct {
 	Style            json.RawMessage     `json:"style"`
 	ClassName        string              `json:"class_name"`
 	Childrens        []EntityNodePayload `json:"childrens"`
+	Label            string              `json:"label"`
 }
 
 func (n *EntityNode) New() {

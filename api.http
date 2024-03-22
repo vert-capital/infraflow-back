@@ -1,0 +1,19 @@
+
+###
+# 1. login user
+###
+POST http://localhost:8080/login
+Content-Type: application/json
+
+{
+  "email": "root@root.com.br",
+  "password": "root"
+}
+
+
+###
+# 2. user me
+###
+GET http://localhost:8080/api/user/me
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6MSwiTmFtZSI6IkFkbWluIiwiRW1haWwiOiJyb290QHJvb3QuY29tLmJyIiwiZXhwIjoxNzExMDQ5NTQzfQ.HyWgmHxkph-GzF-Djl0TnZXfb9vypBIFmR2qbCQryQM

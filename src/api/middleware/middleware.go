@@ -3,7 +3,6 @@ package middleware
 import (
 	usecase_user "app/usecase/user"
 	"net/http"
-	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -11,16 +10,7 @@ import (
 func AuthenticatedMiddleware(usercase usecase_user.IUsecaseUser) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// get bearer token from header
-		bearerToken := c.Request.Header.Get("Authorization")
-
-		if len(strings.Split(bearerToken, " ")) != 2 {
-			c.JSON(http.StatusUnauthorized, gin.H{
-				"message": "Unauthorized",
-			})
-			c.Abort()
-		}
-
-		token := strings.Split(bearerToken, " ")[1]
+		token := c.Request.Header.Get("Authorization")
 
 		user, err := usercase.GetUserByToken(token)
 
