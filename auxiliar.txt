@@ -40,3 +40,31 @@ export type Node<T, U extends string> = {
     style?: React.CSSProperties;
     className?: string;
   };
+
+
+Edge
+  application_id : string;
+  animated: boolean;
+  data: { label: "" } | string;
+  style: React.CSSProperties;
+  selected: boolean;
+  source: string;
+  target: string;
+  sourceHandleId?: string | null;
+  targetHandleId?: string | null;
+  interactionWidth: number;
+  sourceX: number;
+  sourceY: number;
+  targetX: number;
+  targetY: number;
+  sourcePosition: Position;
+  targetPosition: Position;
+  label?: string | React.ReactNode;
+  labelStyle?: React.CSSProperties;
+  labelShowBg?: boolean;
+  labelBgStyle?: React.CSSProperties;
+  labelBgPadding?: [number, number];
+  labelBgBorderRadius?: number;
+  markerStart?: string;
+  markerEnd?: string;
+  pathOptions?: any;

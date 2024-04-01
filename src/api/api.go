@@ -38,6 +38,7 @@ func setupRouter(conn *gorm.DB) *gin.Engine {
 	handlers.MountUsersHandlers(r, conn)
 	handlers.MountNodeHandlers(r, conn)
 	handlers.MountApplicationHandlers(r, conn)
+	handlers.MountEdgeHandlers(r, conn)
 
 	return r
 }

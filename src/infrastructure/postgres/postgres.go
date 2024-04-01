@@ -26,6 +26,7 @@ func Migrations() {
 	db.AutoMigrate(&entity.EntityUser{})
 	db.AutoMigrate(&entity.EntityApplication{})
 	db.AutoMigrate(&entity.EntityNode{})
+	db.AutoMigrate(&entity.EntityEdge{})
 }
 
 func conn() *gorm.DB {

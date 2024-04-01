@@ -50,6 +50,7 @@ func convertNodeToNodePayload(node *entity.EntityNode, childrens []entity.Entity
 		ApplicationID:    node.ApplicationID,
 		Application:      node.Application,
 		Position:         position,
+		Data:			  data,
 		Type:             node.Type,
 		SourcePosition:   node.SourcePosition,
 		TargetPosition:   node.TargetPosition,
@@ -74,6 +75,7 @@ func convertNodeToNodePayload(node *entity.EntityNode, childrens []entity.Entity
 		Style:            style,
 		ClassName:        node.ClassName,
 		Childrens:        childrens,
+		Label:			  node.Label,
 	}
 }
 
